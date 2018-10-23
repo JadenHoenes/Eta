@@ -19,5 +19,5 @@ A simple and very much WIP open-source rogue-like dungeon crawler
 * Probably something else
 
 
-Latest version: 0.0.2
+Latest version: 0.0.2:
 [Download](https://drive.google.com/file/d/1tBCBQ8jQs1U54mRWi5Cg2r88iGuLxHrA/view?usp=sharing)
