@@ -20,4 +20,4 @@ A simple and very much WIP open-source rogue-like dungeon crawler
 
 
 Latest version: 0.0.2:
-[Download](https://drive.google.com/file/d/1tBCBQ8jQs1U54mRWi5Cg2r88iGuLxHrA/view?usp=sharing)
+[Download](https://drive.google.com/uc?export=download&id=1tBCBQ8jQs1U54mRWi5Cg2r88iGuLxHrA)
