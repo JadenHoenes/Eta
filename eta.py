@@ -197,7 +197,7 @@ class Fighter:
 
     def attack(self, target):
         # a simple formula for attack damage
-        damage = self.power - target.fighter.defense
+        damage = self.power - (math.floor(target.fighter.defense*.90-1)+1)
 
         if damage > 0:
             # make the target take some damage
@@ -526,6 +526,10 @@ def place_objects(room):
     item_chances['confuse'] = from_dungeon_level([[10, 2]])
     item_chances['sword'] = from_dungeon_level([[5, 4]])
     item_chances['shield'] = from_dungeon_level([[15, 8]])
+    item_chances['leather helmet'] = from_dungeon_level([[5, 10]])
+    item_chances['leather greaves'] = from_dungeon_level([[5, 12]])
+    item_chances['leather gauntlets'] = from_dungeon_level([[5, 14]])
+    item_chances['leather breastplate'] = from_dungeon_level([[5, 16]])
 
     # choose random number of monsters
     num_monsters = libtcod.random_get_int(0, 0, max_monsters)
@@ -596,6 +600,22 @@ def place_objects(room):
                 # create a shield
                 equipment_component = Equipment(slot='left hand', defense_bonus=1)
                 item = Object(x, y, '[', 'shield', libtcod.darker_orange, equipment=equipment_component)
+                
+            elif choice == 'leather helmet':
+                equipment_component = Equipment(slot='head', defense_bonus=1)
+                item = Object(x, y, '}', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                
+            elif choice == 'leather greaves':
+                equipment_component = Equipment(slot='legs', defense_bonus=1)
+                item = Object(x, y, '║', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                
+            elif choice == 'leather gauntlets':
+                equipment_component = Equipment(slot='hands', defense_bonus=1)
+                item = Object(x, y, '○', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                
+            elif choice == 'leather breastplate':
+                equipment_component = Equipment(slot='chest', defense_bonus=2)
+                item = Object(x, y, '╦', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
 
             objects.append(item)
             item.send_to_back()  # items appear below other objects
