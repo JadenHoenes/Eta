@@ -19,11 +19,11 @@ A simple and very much WIP open-source rogue-like dungeon crawler
 * Probably something else
 
 
-Latest version: 0.0.2:
+Latest version: 0.0.3:
 
-[Download](https://drive.google.com/uc?export=download&id=1tBCBQ8jQs1U54mRWi5Cg2r88iGuLxHrA)
+[Download](https://drive.google.com/uc?export=download&id=1Q9QLKNEwxOnK4R1bSuUOOtcgXHUV5Tof)
 
-[Source Code](https://drive.google.com/uc?export=download&id=1X7yO_sXpTqyBs4vl2Uby6X4U1aNHVPqB)
+[Source Code](https://drive.google.com/uc?export=download&id=14OhJSBvMGaCzJLkhLZzycvTMX8Rrz4Dt)
 
 ## Build Your Own!
 
