@@ -746,7 +746,7 @@ def player_move_or_attack(dx, dy):
         fov_recompute = True
 
 
-def menu(header, options, width):
+def menu(header, options, width, op):
     if len(options) > 26:
         raise ValueError('Cannot have a menu with more than 26 options.')
 
@@ -775,7 +775,7 @@ def menu(header, options, width):
     # blit the contents of "window" to the root console
     x = SCREEN_WIDTH // 2 - width // 2
     y = SCREEN_HEIGHT // 2 - height // 2
-    libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.7)
+    libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, op)
 
     # present the root console to the player and wait for a key-press
     libtcod.console_flush()
@@ -804,16 +804,26 @@ def inventory_menu(header):
                 text = text + ' (on ' + item.equipment.slot + ')'
             options.append(text)
 
-    index = menu(header, options, INVENTORY_WIDTH)
+    index = menu(header, options, INVENTORY_WIDTH, 0.7)
 
     # if an item was chosen, return it
     if index is None or len(inventory) == 0:
         return None
     return inventory[index].item
 
+def control_menu():
+    msgbox('controls:\n\nup arrow/numpad 8:    move up\nleft arrow/numpad 4:  move left\nright arrow/numpad 6: move right\ndown arrow/numpad 2:  move down\nnumpad 7/home:        move diagonal up & left\n' +
+    'numpad 9/page up:     move diagonal up & right\nnumpad 1/end:         move diagonal down & left\nnumpad 3/page down:   move diagonal down & right\ng:                    pick up item\n'+
+    'i:                    open inventory\nd:                    open drop item menu\nc:                    open character menu\ncomma (,):            descend stairs\nesc:                  exit & save / exit menu', 1.0)
 
-def msgbox(text, width=50):
-    menu(text, [], width)  # use menu() as a sort of "message box"
+def character_menu():
+    level_up_xp = LEVEL_UP_BASE + player.level * LEVEL_UP_FACTOR
+    msgbox('Character Information\n\nLevel: ' + str(player.level) + '\nExperience: ' + str(player.fighter.xp) +
+           '\nExperience to level up: ' + str(level_up_xp-player.fighter.xp) + '\n\nMaximum HP: ' + str(player.fighter.max_hp) +
+           '\nAttack: ' + str(player.fighter.power) + '\nDefense: ' + str(player.fighter.defense), 0.7, CHARACTER_SCREEN_WIDTH)
+
+def msgbox(text, op, width=50):
+    menu(text, [], width, op)  # use menu() as a sort of "message box"
 
 
 def handle_keys():
@@ -871,18 +881,15 @@ def handle_keys():
 
             if key_char == 'c':
                 # show character information
-                level_up_xp = LEVEL_UP_BASE + player.level * LEVEL_UP_FACTOR
-                msgbox('Character Information\n\nLevel: ' + str(player.level) + '\nExperience: ' + str(player.fighter.xp) +
-                       '\nExperience to level up: ' + str(level_up_xp-player.fighter.xp) + '\n\nMaximum HP: ' + str(player.fighter.max_hp) +
-                       '\nAttack: ' + str(player.fighter.power) + '\nDefense: ' + str(player.fighter.defense), CHARACTER_SCREEN_WIDTH)
+                character_menu()
 
             if key_char == ',':
                 # go down stairs, if the player is on them
                 if stairs.x == player.x and stairs.y == player.y:
                     next_level()
 
-            #if key_char == 'n':
-                #player_move_or_attack(-8, 0)
+            if key_char == 'l':
+                control_menu()
 
             return 'didnt-take-turn'
 
@@ -901,7 +908,7 @@ def check_level_up():
             choice = menu('Level up! Choose a stat to raise:\n',
                           ['Constitution (+20 HP, from ' + str(player.fighter.max_hp) + ')',
                            'Strength (+1 attack, from ' + str(player.fighter.power) + ')',
-                           'Agility (+1 defense, from ' + str(player.fighter.defense) + ')'], LEVEL_SCREEN_WIDTH)
+                           'Agility (+1 defense, from ' + str(player.fighter.defense) + ')'], LEVEL_SCREEN_WIDTH, 0.7)
 
         if choice == 0:
             player.fighter.base_max_hp += 20
@@ -1038,7 +1045,7 @@ def cast_fireball():
     global usespell, fov_recompute
     # ask the player for a target tile to throw a fireball at
     message('Left-click a target tile for the fireball, or right-click to cancel.', libtcod.light_cyan)
-    srad=FIREBALL_RANGE
+    srad=FIREBALL_RADIUS
     usespell=True
     color_spell_wall = libtcod.darkest_flame
     color_spell_ground = libtcod.flame
@@ -1138,6 +1145,7 @@ def new_game():
 
     # a warm welcoming message!
     message('Welcome stranger! Prepare to perish in the Tomb of ETA, the 7th king of the bronze age.', libtcod.red)
+    message('Press (l) to view the controls', libtcod.yellow)
 
     # initial equipment: a dagger
     equipment_component = Equipment(slot='right hand', power_bonus=2)
@@ -1220,11 +1228,11 @@ def main_menu():
         # show the game's title, and some credits!
         libtcod.console_set_default_foreground(0, libtcod.light_yellow)
         libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 4, libtcod.BKGND_NONE, libtcod.CENTER, 'ETA')
-        libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 3, libtcod.BKGND_NONE, libtcod.CENTER, 'version 0.0.2')
+        libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 3, libtcod.BKGND_NONE, libtcod.CENTER, 'version 0.0.3')
         libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 2, libtcod.BKGND_NONE, libtcod.CENTER, 'By Floomp')
 
         # show options and wait for the player's choice
-        choice = menu('', ['Play a new game', 'Continue last game', 'Quit'], 24)
+        choice = menu('', ['Play a new game', 'Continue last game', 'Controls', 'Quit'], 24, 0.7)
 
         if choice == 0:  # new game
             new_game()
@@ -1236,7 +1244,9 @@ def main_menu():
                 msgbox('\n No saved game to load.\n', 24)
                 continue
             play_game()
-        elif choice == 2:  # quit
+        elif choice == 2:
+            control_menu()
+        elif choice == 3:  # quit
             break
 
 
