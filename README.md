@@ -20,14 +20,18 @@ A simple and very much WIP open-source rogue-like dungeon crawler
 
 
 Latest version: 0.0.2:
+
 [Download](https://drive.google.com/uc?export=download&id=1tBCBQ8jQs1U54mRWi5Cg2r88iGuLxHrA)
+
 [Source Code](https://drive.google.com/uc?export=download&id=1X7yO_sXpTqyBs4vl2Uby6X4U1aNHVPqB)
 
 ## Build Your Own!
 
 1. Download Source Code!
 2. Install Python 3.6
-3. Use pip to install pyinstaller
+3. Install pyinstaller 
+  -```pip install pyinstaller```
 4. Edit the source code to your liking
-5. Build by using the command 'pyinstaller -Fwi "etaico.ico" eta.py'
+5. Build by using the command 
+  -```pyinstaller -Fwi "etaico.ico" eta.py```
 6. Go into dist directory that was created and run your exe
