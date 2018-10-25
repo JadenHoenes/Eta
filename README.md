@@ -25,6 +25,16 @@ Latest version: 0.0.3:
 
 [Source Code](https://drive.google.com/uc?export=download&id=14OhJSBvMGaCzJLkhLZzycvTMX8Rrz4Dt)
 
+## To-do
+* Revamp inventory system
+* Revamp combat system
+* Include mouse input for menu's
+* More Items
+* More monsters
+* Better keyboard selection for menu's
+* Convert to gray-scale colors
+* Re-design message system
+
 ## Build Your Own!
 
 1. Download Source Code!
