@@ -4,6 +4,14 @@ import textwrap
 import os
 import libtcodpy as libtcod
 
+#   ******       *******      ****     **     ********    **********     **        ****     **    **********     ********
+#  **////**     **/////**    /**/**   /**    **//////    /////**///     ****      /**/**   /**   /////**///     **////// 
+# **    //     **     //**   /**//**  /**   /**              /**       **//**     /**//**  /**       /**       /**       
+#/**          /**      /**   /** //** /**   /*********       /**      **  //**    /** //** /**       /**       /*********
+#/**          /**      /**   /**  //**/**   ////////**       /**     **********   /**  //**/**       /**       ////////**
+#//**    **   //**     **    /**   //****          /**       /**    /**//////**   /**   //****       /**              /**
+# //******     //*******     /**    //***    ********        /**    /**     /**   /**    //***       /**        ******** 
+#  //////       ///////      //      ///    ////////         //     //      //    //      ///        //        ////////  
 # actual size of the window
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
@@ -48,17 +56,26 @@ TORCH_RADIUS = 10
 
 LIMIT_FPS = 20  # 20 frames-per-second maximum
 
+COLOR_DARK_WALL = libtcod.Color(0, 0, 100)
+COLOR_LIGHT_WALL = libtcod.Color(130, 110, 50)
+COLOR_SPELL_WALL = libtcod.black
+COLOR_DARK_GROUND = libtcod.Color(50, 50, 150)
+COLOR_LIGHT_GROUND = libtcod.Color(200, 180, 50)
+COLOR_SPELL_GROUND = libtcod.white
+
 srad = 0
 usespell = False
 
-color_dark_wall = libtcod.Color(0, 0, 100)
-color_light_wall = libtcod.Color(130, 110, 50)
-color_spell_wall = libtcod.black
-color_dark_ground = libtcod.Color(50, 50, 150)
-color_light_ground = libtcod.Color(200, 180, 50)
-color_spell_ground = libtcod.white
 
 
+#   *******      ******           **    ********      ******     **********     ********
+#  **/////**    /*////**         /**   /**/////      **////**   /////**///     **////// 
+# **     //**   /*   /**         /**   /**          **    //        /**       /**       
+#/**      /**   /******          /**   /*******    /**              /**       /*********
+#/**      /**   /*//// **        /**   /**////     /**              /**       ////////**
+#//**     **    /*    /**    **  /**   /**         //**    **       /**              /**
+# //*******     /*******    //*****    /********    //******        /**        ******** 
+#  ///////      ///////      /////     ////////      //////         //        ////////  
 class Tile:
     # a tile of the map and its properties
     def __init__(self, blocked, block_sight=None):
@@ -356,7 +373,14 @@ def get_all_equipped(obj):  # returns a list of equipped items
     else:
         return []  # other objects have no equipment
 
-
+# **          ********    **      **    ********    **      
+#/**         /**/////    /**     /**   /**/////    /**      
+#/**         /**         /**     /**   /**         /**      
+#/**         /*******    //**    **    /*******    /**      
+#/**         /**////      //**  **     /**////     /**      
+#/**         /**           //****      /**         /**      
+#/********   /********      //**       /********   /********
+#////////    ////////        //        ////////    //////// 
 def is_blocked(x, y):
     # first test the map tile
     if map[x][y].blocked:
@@ -620,8 +644,15 @@ def place_objects(room):
             objects.append(item)
             item.send_to_back()  # items appear below other objects
             item.always_visible = True  # items are visible even out-of-FOV, if in an explored area
-
-
+            
+# *******      ********    ****     **    *******      ********    *******      **    ****     **      ******** 
+#/**////**    /**/////    /**/**   /**   /**////**    /**/////    /**////**    /**   /**/**   /**     **//////**
+#/**   /**    /**         /**//**  /**   /**    /**   /**         /**   /**    /**   /**//**  /**    **      // 
+#/*******     /*******    /** //** /**   /**    /**   /*******    /*******     /**   /** //** /**   /**         
+#/**///**     /**////     /**  //**/**   /**    /**   /**////     /**///**     /**   /**  //**/**   /**    *****
+#/**  //**    /**         /**   //****   /**    **    /**         /**  //**    /**   /**   //****   //**  ////**
+#/**   //**   /********   /**    //***   /*******     /********   /**   //**   /**   /**    //***    //******** 
+#//     //    ////////    //      ///    ///////      ////////    //     //    //    //      ///      ////////  
 def render_bar(x, y, total_width, name, value, maximum, bar_color, back_color):
     # render a bar (HP, experience, etc). first calculate the width of the bar
     bar_width = int(((value*1.00)/(maximum*1.00))*total_width)
@@ -660,8 +691,8 @@ def redraw():
     render_all()
 
 def render_all():
-    global fov_map, color_dark_wall, color_light_wall, color_spell_wall
-    global color_dark_ground, color_light_ground, color_spell_ground
+    global fov_map, COLOR_DARK_WALL, COLOR_LIGHT_WALL, COLOR_SPELL_WALL
+    global COLOR_DARK_GROUND, COLOR_LIGHT_GROUND, COLOR_SPELL_GROUND
     global fov_recompute, usespell
     global srad
 
@@ -678,21 +709,21 @@ def render_all():
                     # if it's not visible right now, the player can only see it if it's explored
                     if map[x][y].explored:
                         if wall:
-                            libtcod.console_set_char_background(con, x, y, color_dark_wall, libtcod.BKGND_SET)
+                            libtcod.console_set_char_background(con, x, y, COLOR_DARK_WALL, libtcod.BKGND_SET)
                         else:
-                            libtcod.console_set_char_background(con, x, y, color_dark_ground, libtcod.BKGND_SET)
+                            libtcod.console_set_char_background(con, x, y, COLOR_DARK_GROUND, libtcod.BKGND_SET)
                 else:
                     # it's visible
                     if wall:
-                        libtcod.console_set_char_background(con, x, y, color_light_wall, libtcod.BKGND_SET)
+                        libtcod.console_set_char_background(con, x, y, COLOR_LIGHT_WALL, libtcod.BKGND_SET)
                         if usespell:
                             if dis(x, y, player.x, player.y) <= srad:
-                                libtcod.console_set_char_background(con, x, y, color_spell_wall, libtcod.BKGND_SET)
+                                libtcod.console_set_char_background(con, x, y, COLOR_SPELL_WALL, libtcod.BKGND_SET)
                     else:
-                        libtcod.console_set_char_background(con, x, y, color_light_ground, libtcod.BKGND_SET)
+                        libtcod.console_set_char_background(con, x, y, COLOR_LIGHT_GROUND, libtcod.BKGND_SET)
                         if usespell:
                             if dis(x, y, player.x, player.y) <= srad:
-                                libtcod.console_set_char_background(con, x, y, color_spell_ground, libtcod.BKGND_SET)
+                                libtcod.console_set_char_background(con, x, y, COLOR_SPELL_GROUND, libtcod.BKGND_SET)
                         # since it's visible, explore it
                     map[x][y].explored = True
 
@@ -729,41 +760,6 @@ def render_all():
 
     # blit the contents of "panel" to the root console
     libtcod.console_blit(panel, 0, 0, SCREEN_WIDTH, PANEL_HEIGHT, 0, 0, PANEL_Y)
-
-
-def message(new_msg, color=libtcod.white):
-    # split the message if necessary, among multiple lines
-    new_msg_lines = textwrap.wrap(new_msg, MSG_WIDTH)
-
-    for line in new_msg_lines:
-        # if the buffer is full, remove the first line to make room for the new one
-        if len(game_msgs) == MSG_HEIGHT:
-            del game_msgs[0]
-
-        # add the new line as a tuple, with the text and the color
-        game_msgs.append((line, color))
-
-
-def player_move_or_attack(dx, dy):
-    global fov_recompute
-
-    # the coordinates the player is moving to/attacking
-    x = player.x + dx
-    y = player.y + dy
-
-    # try to find an attackable object there
-    target = None
-    for object in objects:
-        if object.fighter and object.x == x and object.y == y:
-            target = object
-            break
-
-    # attack if target found, move otherwise
-    if target is not None:
-        player.fighter.attack(target)
-    else:
-        player.move(dx, dy)
-        fov_recompute = True
 
 
 def menu(header, options, width, op):
@@ -844,6 +840,47 @@ def character_menu():
 
 def msgbox(text, op, width=50):
     menu(text, [], width, op)  # use menu() as a sort of "message box"
+
+def message(new_msg, color=libtcod.white):
+    # split the message if necessary, among multiple lines
+    new_msg_lines = textwrap.wrap(new_msg, MSG_WIDTH)
+
+    for line in new_msg_lines:
+        # if the buffer is full, remove the first line to make room for the new one
+        if len(game_msgs) == MSG_HEIGHT:
+            del game_msgs[0]
+
+        # add the new line as a tuple, with the text and the color
+        game_msgs.append((line, color))
+
+# *******     **              **        **    **    ********    *******  
+#/**////**   /**             ****      //**  **    /**/////    /**////** 
+#/**   /**   /**            **//**      //****     /**         /**   /** 
+#/*******    /**           **  //**      //**      /*******    /*******  
+#/**////     /**          **********      /**      /**////     /**///**  
+#/**         /**         /**//////**      /**      /**         /**  //** 
+#/**         /********   /**     /**      /**      /********   /**   //**
+#//          ////////    //      //       //       ////////    //     // 
+def player_move_or_attack(dx, dy):
+    global fov_recompute
+
+    # the coordinates the player is moving to/attacking
+    x = player.x + dx
+    y = player.y + dy
+
+    # try to find an attackable object there
+    target = None
+    for object in objects:
+        if object.fighter and object.x == x and object.y == y:
+            target = object
+            break
+
+    # attack if target found, move otherwise
+    if target is not None:
+        player.fighter.attack(target)
+    else:
+        player.move(dx, dy)
+        fov_recompute = True
 
 
 def handle_keys():
@@ -938,7 +975,14 @@ def check_level_up():
         elif choice == 2:
             player.fighter.base_defense += 1
 
-
+#   ******       *******      ****     ****    ******          **        **********
+#  **////**     **/////**    /**/**   **/**   /*////**        ****      /////**/// 
+# **    //     **     //**   /**//** ** /**   /*   /**       **//**         /**    
+#/**          /**      /**   /** //***  /**   /******       **  //**        /**    
+#/**          /**      /**   /**  //*   /**   /*//// **    **********       /**    
+#//**    **   //**     **    /**   /    /**   /*    /**   /**//////**       /**    
+# //******     //*******     /**        /**   /*******    /**     /**       /**    
+#  //////       ///////      //         //    ///////     //      //        //     
 def player_death(player):
     # the game ended!
     global game_state
@@ -1030,15 +1074,15 @@ def cast_heal():
 
 
 def cast_lightning():
-    global color_spell_wall, color_spell_ground
+    global COLOR_SPELL_WALL, COLOR_SPELL_GROUND
     global srad
     global usespell, fov_recompute
     # find closest enemy (inside a maximum range) and damage it
     message('Left-click to zap the closest enemy!, or right-click to cancel.', libtcod.light_cyan)
     srad=LIGHTNING_RANGE
     usespell=True
-    color_spell_wall = libtcod.darkest_cyan
-    color_spell_ground = libtcod.cyan
+    COLOR_SPELL_WALL = libtcod.darkest_cyan
+    COLOR_SPELL_GROUND = libtcod.cyan
     redraw()
     (x, y) = target_tile()
     if x is None:
@@ -1060,15 +1104,15 @@ def cast_lightning():
 
 
 def cast_fireball():
-    global color_spell_wall, color_spell_ground
+    global COLOR_SPELL_WALL, COLOR_SPELL_GROUND
     global srad
     global usespell, fov_recompute
     # ask the player for a target tile to throw a fireball at
     message('Left-click a target tile for the fireball, or right-click to cancel.', libtcod.light_cyan)
     srad=FIREBALL_RADIUS
     usespell=True
-    color_spell_wall = libtcod.darkest_flame
-    color_spell_ground = libtcod.flame
+    COLOR_SPELL_WALL = libtcod.darkest_flame
+    COLOR_SPELL_GROUND = libtcod.flame
     redraw()
     (x, y) = target_tile()
     if x is None:
@@ -1085,15 +1129,15 @@ def cast_fireball():
 
 
 def cast_confuse():
-    global color_spell_wall, color_spell_ground
+    global COLOR_SPELL_WALL, COLOR_SPELL_GROUND
     global srad
     global usespell, fov_recompute
     # ask the player for a target to confuse
     message('Left-click an enemy to confuse it, or right-click to cancel.', libtcod.light_cyan)
     srad=CONFUSE_RANGE
     usespell=True
-    color_spell_wall = libtcod.darkest_purple
-    color_spell_ground = libtcod.purple
+    COLOR_SPELL_WALL = libtcod.darkest_purple
+    COLOR_SPELL_GROUND = libtcod.purple
     redraw()
     monster = target_monster(CONFUSE_RANGE)
     if monster is None:
@@ -1109,7 +1153,14 @@ def cast_confuse():
     usespell=False
     redraw()
 
-
+#   ********         **        ****     ****    ********
+#  **//////**       ****      /**/**   **/**   /**///// 
+# **      //       **//**     /**//** ** /**   /**      
+#/**              **  //**    /** //***  /**   /******* 
+#/**    *****    **********   /**  //*   /**   /**////  
+#//**  ////**   /**//////**   /**   /    /**   /**      
+# //********    /**     /**   /**        /**   /********
+#  ////////     //      //    //         //    //////// 
 def save_game(yn):
     # open a new empty shelve (possibly overwriting an old one) to write the game data
     if yn:
