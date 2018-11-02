@@ -56,12 +56,12 @@ TORCH_RADIUS = 10
 
 LIMIT_FPS = 20  # 20 frames-per-second maximum
 
-COLOR_DARK_WALL = libtcod.Color(0, 0, 100)
-COLOR_LIGHT_WALL = libtcod.Color(130, 110, 50)
-COLOR_SPELL_WALL = libtcod.black
-COLOR_DARK_GROUND = libtcod.Color(50, 50, 150)
-COLOR_LIGHT_GROUND = libtcod.Color(200, 180, 50)
-COLOR_SPELL_GROUND = libtcod.white
+COLOR_DARK_WALL = libtcod.darker_gray
+COLOR_LIGHT_WALL = libtcod.dark_gray
+COLOR_SPELL_WALL = libtcod.gray
+COLOR_DARK_GROUND = libtcod.gray
+COLOR_LIGHT_GROUND = libtcod.light_gray
+COLOR_SPELL_GROUND = libtcod.lighter_gray
 
 srad = 0
 usespell = False
@@ -571,7 +571,7 @@ def place_objects(room):
                 fighter_component = Fighter(hp=20, defense=0, power=4, xp=35, death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green,
+                monster = Object(x, y, 'o', 'orc', libtcod.darkest_gray,
                                  blocks=True, fighter=fighter_component, ai=ai_component)
 
             elif choice == 'troll':
@@ -579,7 +579,7 @@ def place_objects(room):
                 fighter_component = Fighter(hp=30, defense=2, power=8, xp=100, death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'T', 'troll', libtcod.darker_green,
+                monster = Object(x, y, 'T', 'troll', libtcod.darkest_gray,
                                  blocks=True, fighter=fighter_component, ai=ai_component)
 
             objects.append(monster)
@@ -598,48 +598,48 @@ def place_objects(room):
             if choice == 'heal':
                 # create a healing potion
                 item_component = Item(use_function=cast_heal)
-                item = Object(x, y, '!', 'healing potion', libtcod.violet, item=item_component)
+                item = Object(x, y, '!', 'healing potion', libtcod.darkest_gray, item=item_component)
 
             elif choice == 'lightning':
                 # create a lightning bolt scroll
                 item_component = Item(use_function=cast_lightning)
-                item = Object(x, y, '#', 'scroll of lightning bolt', libtcod.light_yellow, item=item_component)
+                item = Object(x, y, '#', 'scroll of lightning bolt', libtcod.darkest_gray, item=item_component)
 
             elif choice == 'fireball':
                 # create a fireball scroll
                 item_component = Item(use_function=cast_fireball)
-                item = Object(x, y, '#', 'scroll of fireball', libtcod.light_yellow, item=item_component)
+                item = Object(x, y, '#', 'scroll of fireball', libtcod.darkest_gray, item=item_component)
 
             elif choice == 'confuse':
                 # create a confuse scroll
                 item_component = Item(use_function=cast_confuse)
-                item = Object(x, y, '#', 'scroll of confusion', libtcod.light_yellow, item=item_component)
+                item = Object(x, y, '#', 'scroll of confusion', libtcod.darkest_gray, item=item_component)
 
             elif choice == 'sword':
                 # create a sword
                 equipment_component = Equipment(slot='right hand', power_bonus=3)
-                item = Object(x, y, '/', 'sword', libtcod.sky, equipment=equipment_component)
+                item = Object(x, y, '/', 'sword', libtcod.darkest_gray, equipment=equipment_component)
 
             elif choice == 'shield':
                 # create a shield
                 equipment_component = Equipment(slot='left hand', defense_bonus=1)
-                item = Object(x, y, '[', 'shield', libtcod.darker_orange, equipment=equipment_component)
+                item = Object(x, y, '[', 'shield', libtcod.darkest_gray, equipment=equipment_component)
                 
             elif choice == 'leather helmet':
                 equipment_component = Equipment(slot='head', defense_bonus=1)
-                item = Object(x, y, '}', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                item = Object(x, y, '}', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
                 
             elif choice == 'leather greaves':
                 equipment_component = Equipment(slot='legs', defense_bonus=1)
-                item = Object(x, y, '║', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                item = Object(x, y, '║', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
                 
             elif choice == 'leather gauntlets':
                 equipment_component = Equipment(slot='hands', defense_bonus=1)
-                item = Object(x, y, '○', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                item = Object(x, y, '○', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
                 
             elif choice == 'leather breastplate':
                 equipment_component = Equipment(slot='chest', defense_bonus=2)
-                item = Object(x, y, '╦', 'leather helmet', libtcod.light_brown, equipment=equipment_component)
+                item = Object(x, y, '╦', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
 
             objects.append(item)
             item.send_to_back()  # items appear below other objects
@@ -1081,8 +1081,6 @@ def cast_lightning():
     message('Left-click to zap the closest enemy!, or right-click to cancel.', libtcod.light_cyan)
     srad=LIGHTNING_RANGE
     usespell=True
-    COLOR_SPELL_WALL = libtcod.darkest_cyan
-    COLOR_SPELL_GROUND = libtcod.cyan
     redraw()
     (x, y) = target_tile()
     if x is None:
@@ -1111,8 +1109,6 @@ def cast_fireball():
     message('Left-click a target tile for the fireball, or right-click to cancel.', libtcod.light_cyan)
     srad=FIREBALL_RADIUS
     usespell=True
-    COLOR_SPELL_WALL = libtcod.darkest_flame
-    COLOR_SPELL_GROUND = libtcod.flame
     redraw()
     (x, y) = target_tile()
     if x is None:
@@ -1136,8 +1132,6 @@ def cast_confuse():
     message('Left-click an enemy to confuse it, or right-click to cancel.', libtcod.light_cyan)
     srad=CONFUSE_RANGE
     usespell=True
-    COLOR_SPELL_WALL = libtcod.darkest_purple
-    COLOR_SPELL_GROUND = libtcod.purple
     redraw()
     monster = target_monster(CONFUSE_RANGE)
     if monster is None:
@@ -1199,7 +1193,7 @@ def new_game():
 
     # create object representing the player
     fighter_component = Fighter(hp=100, defense=1, power=2, xp=0, death_function=player_death)
-    player = Object(0, 0, '@', 'player', libtcod.white, blocks=True, fighter=fighter_component)
+    player = Object(0, 0, '@', 'player', libtcod.darkest_gray, blocks=True, fighter=fighter_component)
 
     player.level = 1
 
