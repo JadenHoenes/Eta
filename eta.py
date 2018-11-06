@@ -56,12 +56,12 @@ TORCH_RADIUS = 10
 
 LIMIT_FPS = 20  # 20 frames-per-second maximum
 
-COLOR_DARK_WALL = libtcod.darker_gray
-COLOR_LIGHT_WALL = libtcod.dark_gray
-COLOR_SPELL_WALL = libtcod.gray
-COLOR_DARK_GROUND = libtcod.gray
-COLOR_LIGHT_GROUND = libtcod.light_gray
-COLOR_SPELL_GROUND = libtcod.lighter_gray
+COLOR_DARK_WALL = libtcod.darker_grey
+COLOR_LIGHT_WALL = libtcod.dark_grey
+COLOR_SPELL_WALL = libtcod.grey
+COLOR_DARK_GROUND = libtcod.grey
+COLOR_LIGHT_GROUND = libtcod.light_grey
+COLOR_SPELL_GROUND = libtcod.lighter_grey
 
 srad = 0
 usespell = False
@@ -274,7 +274,7 @@ class ConfusedMonster:
 
         else:  # restore the previous AI (this one will be deleted because it's not referenced anymore)
             self.owner.ai = self.old_ai
-            message('The ' + self.owner.name + ' is no longer confused!', libtcod.red)
+            message('The ' + self.owner.name + ' is no longer confused!', libtcod.light_grey)
 
 
 class Item:
@@ -285,11 +285,11 @@ class Item:
     def pick_up(self):
         # add to the player's inventory and remove from the map
         if len(inventory) >= 26:
-            message('Your inventory is full, cannot pick up ' + self.owner.name + '.', libtcod.red)
+            message('Your inventory is full, cannot pick up ' + self.owner.name + '.', libtcod.light_grey)
         else:
             inventory.append(self.owner)
             objects.remove(self.owner)
-            message('You picked up a ' + self.owner.name + '!', libtcod.green)
+            message('You picked up a ' + self.owner.name + '!', libtcod.lightest_grey)
 
             # special case: automatically equip, if the corresponding equipment slot is unused
             equipment = self.owner.equipment
@@ -306,7 +306,7 @@ class Item:
         inventory.remove(self.owner)
         self.owner.x = player.x
         self.owner.y = player.y
-        message('You dropped a ' + self.owner.name + '.', libtcod.yellow)
+        message('You dropped a ' + self.owner.name + '.', libtcod.lighter_grey)
 
     def use(self):
         # special case: if the object has the Equipment component, the "use" action is to equip/dequip
@@ -346,14 +346,14 @@ class Equipment:
 
         # equip object and show a message about it
         self.is_equipped = True
-        message('Equipped ' + self.owner.name + ' on ' + self.slot + '.', libtcod.light_green)
+        message('Equipped ' + self.owner.name + ' on ' + self.slot + '.', libtcod.lighter_grey)
 
     def dequip(self):
         # dequip object and show a message about it
         if not self.is_equipped:
             return
         self.is_equipped = False
-        message('Dequipped ' + self.owner.name + ' from ' + self.slot + '.', libtcod.light_yellow)
+        message('Dequipped ' + self.owner.name + ' from ' + self.slot + '.', libtcod.lightest_grey)
 
 
 def get_equipped_in_slot(slot):  # returns the equipment in a slot, or None if it's empty
@@ -571,7 +571,7 @@ def place_objects(room):
                 fighter_component = Fighter(hp=20, defense=0, power=4, xp=35, death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'o', 'orc', libtcod.darkest_gray,
+                monster = Object(x, y, 'o', 'orc', libtcod.darkest_grey,
                                  blocks=True, fighter=fighter_component, ai=ai_component)
 
             elif choice == 'troll':
@@ -579,7 +579,7 @@ def place_objects(room):
                 fighter_component = Fighter(hp=30, defense=2, power=8, xp=100, death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'T', 'troll', libtcod.darkest_gray,
+                monster = Object(x, y, 'T', 'troll', libtcod.darkest_grey,
                                  blocks=True, fighter=fighter_component, ai=ai_component)
 
             objects.append(monster)
@@ -598,48 +598,48 @@ def place_objects(room):
             if choice == 'heal':
                 # create a healing potion
                 item_component = Item(use_function=cast_heal)
-                item = Object(x, y, '!', 'healing potion', libtcod.darkest_gray, item=item_component)
+                item = Object(x, y, '!', 'healing potion', libtcod.darkest_grey, item=item_component)
 
             elif choice == 'lightning':
                 # create a lightning bolt scroll
                 item_component = Item(use_function=cast_lightning)
-                item = Object(x, y, '#', 'scroll of lightning bolt', libtcod.darkest_gray, item=item_component)
+                item = Object(x, y, '#', 'scroll of lightning bolt', libtcod.darkest_grey, item=item_component)
 
             elif choice == 'fireball':
                 # create a fireball scroll
                 item_component = Item(use_function=cast_fireball)
-                item = Object(x, y, '#', 'scroll of fireball', libtcod.darkest_gray, item=item_component)
+                item = Object(x, y, '#', 'scroll of fireball', libtcod.darkest_grey, item=item_component)
 
             elif choice == 'confuse':
                 # create a confuse scroll
                 item_component = Item(use_function=cast_confuse)
-                item = Object(x, y, '#', 'scroll of confusion', libtcod.darkest_gray, item=item_component)
+                item = Object(x, y, '#', 'scroll of confusion', libtcod.darkest_grey, item=item_component)
 
             elif choice == 'sword':
                 # create a sword
                 equipment_component = Equipment(slot='right hand', power_bonus=3)
-                item = Object(x, y, '/', 'sword', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '/', 'sword', libtcod.darkest_grey, equipment=equipment_component)
 
             elif choice == 'shield':
                 # create a shield
                 equipment_component = Equipment(slot='left hand', defense_bonus=1)
-                item = Object(x, y, '[', 'shield', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '[', 'shield', libtcod.darkest_grey, equipment=equipment_component)
                 
             elif choice == 'leather helmet':
                 equipment_component = Equipment(slot='head', defense_bonus=1)
-                item = Object(x, y, '}', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '}', 'leather helmet', libtcod.darkest_grey, equipment=equipment_component)
                 
             elif choice == 'leather greaves':
                 equipment_component = Equipment(slot='legs', defense_bonus=1)
-                item = Object(x, y, '║', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '║', 'leather helmet', libtcod.darkest_grey, equipment=equipment_component)
                 
             elif choice == 'leather gauntlets':
                 equipment_component = Equipment(slot='hands', defense_bonus=1)
-                item = Object(x, y, '○', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '○', 'leather helmet', libtcod.darkest_grey, equipment=equipment_component)
                 
             elif choice == 'leather breastplate':
                 equipment_component = Equipment(slot='chest', defense_bonus=2)
-                item = Object(x, y, '╦', 'leather helmet', libtcod.darkest_gray, equipment=equipment_component)
+                item = Object(x, y, '╦', 'leather helmet', libtcod.darkest_grey, equipment=equipment_component)
 
             objects.append(item)
             item.send_to_back()  # items appear below other objects
@@ -750,12 +750,12 @@ def render_all():
         y += 1
 
     # show the player's stats
-    render_bar(1, 1, BAR_WIDTH, 'HP', player.fighter.hp, player.fighter.max_hp, libtcod.light_red, libtcod.darker_red)
-    render_bar(1, 2, BAR_WIDTH, 'XP', player.fighter.xp, (LEVEL_UP_BASE + player.level * LEVEL_UP_FACTOR), libtcod.black, libtcod.darker_green)
+    render_bar(1, 1, BAR_WIDTH, 'HP', player.fighter.hp, player.fighter.max_hp, libtcod.lightest_grey, libtcod.light_grey)
+    render_bar(1, 2, BAR_WIDTH, 'XP', player.fighter.xp, (LEVEL_UP_BASE + player.level * LEVEL_UP_FACTOR), libtcod.lightest_grey, libtcod.light_grey)
     libtcod.console_print_ex(panel, 1, 3, libtcod.BKGND_NONE, libtcod.LEFT, 'Dungeon level ' + str(dungeon_level))
 
     # display names of objects under the mouse
-    libtcod.console_set_default_foreground(panel, libtcod.light_gray)
+    libtcod.console_set_default_foreground(panel, libtcod.light_grey)
     libtcod.console_print_ex(panel, 1, 0, libtcod.BKGND_NONE, libtcod.LEFT, get_names_under_mouse())
 
     # blit the contents of "panel" to the root console
@@ -958,7 +958,7 @@ def check_level_up():
         # it is! level up and ask to raise some stats
         player.level += 1
         player.fighter.xp -= level_up_xp
-        message('Your battle skills grow stronger! You reached level ' + str(player.level) + '!', libtcod.yellow)
+        message('Your battle skills grow stronger! You reached level ' + str(player.level) + '!', libtcod.light_grey)
 
         choice = None
         while choice is None:  # keep asking until a choice is made
@@ -986,12 +986,12 @@ def check_level_up():
 def player_death(player):
     # the game ended!
     global game_state
-    message('You died!', libtcod.red)
+    message('You died!', libtcod.grey)
     game_state = 'dead'
 
     # for added effect, transform the player into a corpse!
     player.char = '%'
-    player.color = libtcod.dark_red
+    player.color = libtcod.black
     save_game(True)
     if os.path.isfile('savegame.dat'):
         os.remove('savegame.dat')
@@ -1004,9 +1004,9 @@ def player_death(player):
 def monster_death(monster):
     # transform it into a nasty corpse! it doesn't block, can't be
     # attacked and doesn't move
-    message('The ' + monster.name + ' is dead! You gain ' + str(monster.fighter.xp) + ' experience points.', libtcod.orange)
+    message('The ' + monster.name + ' is dead! You gain ' + str(monster.fighter.xp) + ' experience points.', libtcod.white)
     monster.char = '%'
-    monster.color = libtcod.dark_red
+    monster.color = libtcod.black
     monster.blocks = False
     monster.fighter = None
     monster.ai = None
@@ -1026,7 +1026,7 @@ def target_tile(max_range=None):
         (x, y) = (mouse.cx, mouse.cy)
 
         if mouse.rbutton_pressed or key.vk == libtcod.KEY_ESCAPE:
-            message('After careful consideration you decide to save your scroll for another day', libtcod.red)
+            message('After careful consideration you decide to save your scroll for another day', libtcod.white)
             return (None, None)  # cancel if the player right-clicked or pressed Escape
 
         # accept the target if the player clicked in FOV, and in case a range is specified, if it's in that range
@@ -1066,10 +1066,10 @@ def closest_monster(max_range):
 def cast_heal():
     # heal the player
     if player.fighter.hp == player.fighter.max_hp:
-        message('You are already at full health.', libtcod.red)
+        message('You are already at full health.', libtcod.white)
         return 'cancelled'
 
-    message('Your wounds start to feel better!', libtcod.light_violet)
+    message('Your wounds start to feel better!', libtcod.white)
     player.fighter.heal(HEAL_AMOUNT)
 
 
@@ -1078,7 +1078,7 @@ def cast_lightning():
     global srad
     global usespell, fov_recompute
     # find closest enemy (inside a maximum range) and damage it
-    message('Left-click to zap the closest enemy!, or right-click to cancel.', libtcod.light_cyan)
+    message('Left-click to zap the closest enemy!, or right-click to cancel.', libtcod.white)
     srad=LIGHTNING_RANGE
     usespell=True
     redraw()
@@ -1089,7 +1089,7 @@ def cast_lightning():
         return 'cancelled'
     monster = closest_monster(LIGHTNING_RANGE)
     if monster is None:  # no enemy found within maximum range
-        message('No enemy is close enough to strike.', libtcod.red)
+        message('No enemy is close enough to strike.', libtcod.grey)
         usespell=False
         redraw()
         return 'cancelled'
@@ -1097,7 +1097,7 @@ def cast_lightning():
     redraw()
     # zap it!
     message('A lighting bolt strikes the ' + monster.name + ' with a loud thunder! The damage is '
-            + str(LIGHTNING_DAMAGE) + ' hit points.', libtcod.light_blue)
+            + str(LIGHTNING_DAMAGE) + ' hit points.', libtcod.white)
     monster.fighter.take_damage(LIGHTNING_DAMAGE)
 
 
@@ -1106,7 +1106,7 @@ def cast_fireball():
     global srad
     global usespell, fov_recompute
     # ask the player for a target tile to throw a fireball at
-    message('Left-click a target tile for the fireball, or right-click to cancel.', libtcod.light_cyan)
+    message('Left-click a target tile for the fireball, or right-click to cancel.', libtcod.white)
     srad=FIREBALL_RADIUS
     usespell=True
     redraw()
@@ -1115,12 +1115,12 @@ def cast_fireball():
         usespell=False
         redraw()
         return 'cancelled'
-    message('The fireball explodes, burning everything within ' + str(FIREBALL_RADIUS) + ' tiles!', libtcod.orange)
+    message('The fireball explodes, burning everything within ' + str(FIREBALL_RADIUS) + ' tiles!', libtcod.grey)
     usespell=False
     redraw()
     for obj in objects:  # damage every fighter in range, including the player
         if obj.distance(x, y) <= FIREBALL_RADIUS and obj.fighter:
-            message('The ' + obj.name + ' gets burned for ' + str(FIREBALL_DAMAGE) + ' hit points.', libtcod.orange)
+            message('The ' + obj.name + ' gets burned for ' + str(FIREBALL_DAMAGE) + ' hit points.', libtcod.grey)
             obj.fighter.take_damage(FIREBALL_DAMAGE)
 
 
@@ -1129,7 +1129,7 @@ def cast_confuse():
     global srad
     global usespell, fov_recompute
     # ask the player for a target to confuse
-    message('Left-click an enemy to confuse it, or right-click to cancel.', libtcod.light_cyan)
+    message('Left-click an enemy to confuse it, or right-click to cancel.', libtcod.white)
     srad=CONFUSE_RANGE
     usespell=True
     redraw()
@@ -1143,7 +1143,7 @@ def cast_confuse():
     old_ai = monster.ai
     monster.ai = ConfusedMonster(old_ai)
     monster.ai.owner = monster  # tell the new component who owns it
-    message('The eyes of the ' + monster.name + ' look vacant, as he starts to stumble around!', libtcod.light_green)
+    message('The eyes of the ' + monster.name + ' look vacant, as he starts to stumble around!', libtcod.white)
     usespell=False
     redraw()
 
@@ -1193,7 +1193,7 @@ def new_game():
 
     # create object representing the player
     fighter_component = Fighter(hp=100, defense=1, power=2, xp=0, death_function=player_death)
-    player = Object(0, 0, '@', 'player', libtcod.darkest_gray, blocks=True, fighter=fighter_component)
+    player = Object(0, 0, '@', 'player', libtcod.darkest_grey, blocks=True, fighter=fighter_component)
 
     player.level = 1
 
@@ -1209,12 +1209,12 @@ def new_game():
     game_msgs = []
 
     # a warm welcoming message!
-    message('Welcome stranger! Prepare to perish in the Tomb of ETA, the 7th king of the bronze age.', libtcod.red)
-    message('Press (l) to view the controls', libtcod.yellow)
+    message('Welcome stranger! Prepare to perish in the Tomb of ETA, the 7th king of the bronze age.', libtcod.white)
+    message('Press (l) to view the controls', libtcod.light_grey)
 
     # initial equipment: a dagger
     equipment_component = Equipment(slot='right hand', power_bonus=2)
-    obj = Object(0, 0, '-', 'dagger', libtcod.sky, equipment=equipment_component)
+    obj = Object(0, 0, '-', 'dagger', libtcod.dark_grey, equipment=equipment_component)
     inventory.append(obj)
     equipment_component.equip()
     obj.always_visible = True
@@ -1223,11 +1223,11 @@ def new_game():
 def next_level():
     # advance to the next level
     global dungeon_level
-    message('You take a moment to rest, and recover your strength.', libtcod.light_violet)
+    message('You take a moment to rest, and recover your strength.', libtcod.white)
     player.fighter.heal(player.fighter.max_hp // 2)  # heal the player by 50%
 
     dungeon_level += 1
-    message('After a rare moment of peace, you descend deeper into the heart of the dungeon...', libtcod.red)
+    message('After a rare moment of peace, you descend deeper into the heart of the dungeon...', libtcod.grey)
     make_map()  # create a fresh new level!
     initialize_fov()
 
@@ -1291,7 +1291,7 @@ def main_menu():
         libtcod.image_blit_2x(img, 0, 0, 0)
 
         # show the game's title, and some credits!
-        libtcod.console_set_default_foreground(0, libtcod.light_yellow)
+        libtcod.console_set_default_foreground(0, libtcod.lighter_grey)
         libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 4, libtcod.BKGND_NONE, libtcod.CENTER, 'ETA')
         libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 3, libtcod.BKGND_NONE, libtcod.CENTER, 'version 0.0.3')
         libtcod.console_print_ex(0, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 2, libtcod.BKGND_NONE, libtcod.CENTER, 'By Floomp')
