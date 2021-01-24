@@ -1,7 +1,9 @@
+
+
 # Eta
-[Website](https://jadenhoenes.github.io/Eta/)
 
 A simple and very much WIP open-source rogue-like dungeon crawler
+Used a dungeon crawler tutorial, added custom item, some lighting, and spell indicators
 
 ## Features
 * Randomly Generated Levels
